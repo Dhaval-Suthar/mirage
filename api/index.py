@@ -14,6 +14,10 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for cross-origin requests from frontend
 logging.basicConfig(level=logging.DEBUG)
 
+# Set maximum upload size to 1 GB
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024  # 1 GB limit
+
+
 # Set up directories and allowed extensions
 UPLOAD_FOLDER = os.path.abspath('uploads')
 PROCESSED_FOLDER = os.path.abspath('processed')
@@ -198,7 +202,7 @@ def serve_processed_video(filename):
 
     # Dynamically detect MIME type using mimetypes library
     mimetype = mimetypes.guess_type(file_path)[0]
-    return send_from_directory(app.config['PROCESSED_FOLDER'], filename, mimetype=mimetype)
+    return send_from_directory(app.config['PROCESSED_FOLDER'], filename, mimetype='video/mp4')
 
 if __name__ == '__main__':
     app.run(port=5328, debug=True)
